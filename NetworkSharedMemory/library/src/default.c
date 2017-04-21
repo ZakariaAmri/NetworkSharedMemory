@@ -13,10 +13,10 @@ static void tsigsegv(int sig, siginfo_t *si, void *context)
 	if(sig == SIGSEGV)
 	{
 		/* adresse de la page qui a fait le defaut alignée  */    
-		long addr = ((long) si->si_addr >> next_page) << next_page ; 
+		long addr = ((long) si->si_addr >> page_shift) << page_shift ; 
 		/* type de l'erreur */
 		int err = ((ucontext_t*)context)->uc_mcontext.gregs[REG_ERR];
-		//printf("Faute de protection sur la page(%lx) Ox%lx !\n", addr, addr >> next_page);
+		//printf("Faute de protection sur la page(%lx) Ox%lx !\n", addr, addr >> page_shift);
 		data* d = search_data_by_addr(addr);
 		num_page = (addr - memory.adr_begin)/page_size;
 		//ECRITURE
@@ -28,12 +28,12 @@ static void tsigsegv(int sig, siginfo_t *si, void *context)
 				exit(1);
 			}
 			if(d->page_update >= 0){
-				envoie_msg(sockac,UPDATE,d->page_update);
+				send_msg(sockac,UPDATE,d->page_update);
 				write(sockac, memory.adr_begin + d->page_update*page_size, page_size);
 			}
 			d->page_update = num_page;
 			get_RW(addr);
-			envoie_msg(sockac,WRITE,num_page);
+			send_msg(sockac,WRITE,num_page);
 			//Maj de la page actuelle 	
 			if(read(sockac, addr,page_size)<0){
 				printf("ERREUR WRITE DEFAULT PAGE  :: %lx \n",addr);
@@ -48,13 +48,13 @@ static void tsigsegv(int sig, siginfo_t *si, void *context)
 			}
 			//printf("LECTURE  >>		%lx \n",addr);
 			get_RW(addr);
-			envoie_msg(sockac,READ,num_page);
+			send_msg(sockac,READ,num_page);
 			
 			//MAJ de la page Actuelle
 			printf(">>   Page A jour :: ");
 			if(read(sockac, addr,page_size)<0){ 
 				printf("ERREUR READ DEFAULT PAGE  :: %lx \n",addr);
-				//recevoir_msg(sockac);
+				//rcv_msg(sockac);
 				perror("read");
 			}
 			printf("OK\n");

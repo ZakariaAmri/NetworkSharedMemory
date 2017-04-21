@@ -11,7 +11,7 @@
 #include <string.h>
 #include <netinet/in.h>
 #define MAX_SLAVE 10
-unsigned next_page; //pour decaler d'une page
+unsigned page_shift; //pour decaler d'une page
 int page_size; //nb octe d'une page
 
 typedef struct mpr mpr;
@@ -63,7 +63,7 @@ typedef int SOCKET_ACCEPT;
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 
-/*		Traitement defaut de page_size	*/
+/*		process defaut de page_size	*/
 struct sigaction sa;
 SOCKET sockac;
 //Serveur
@@ -72,10 +72,10 @@ extern void valider_connexion(int port); //accept() +thread
 
 //Client
 extern SOCKET slave_mpr(SOCKET flux,int port,const char * addr);
-extern int lock_data_read(SOCKET flux,int id);
-extern int unlock_data_read(SOCKET flux,int id);
-extern int lock_data_write(SOCKET flux,int id);
-extern int unlock_data_write(SOCKET flux,int id);
+extern int get_lock_read(SOCKET flux,int id);
+extern int release_lock_read(SOCKET flux,int id);
+extern int get_lock_write(SOCKET flux,int id);
+extern int release_lock_write(SOCKET flux,int id);
 
 //DEBUG
 

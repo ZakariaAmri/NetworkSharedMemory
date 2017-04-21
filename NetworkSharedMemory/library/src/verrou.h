@@ -1,9 +1,19 @@
 #include "var.h" 
 
-void l_data_read(int id);
+#ifndef VERROU_H_
+#define VERROU_H_
 
-void unl_data_read(int id);
+/*		Verouille une donnée en lecture		*/
+void lock_read(int id);
 
-void l_data_write(int id);
 
-void unl_data_write(int id); 
+/*		Déverouille une donnée en lecture		*/
+void unlock_read(int id);
+
+/*		Verouille une donnée en écriture		*/
+void lock_write(int id);
+
+/*		Deverouille une donnée en écriture		*/
+void unlock_write(int id); 
+
+#endif

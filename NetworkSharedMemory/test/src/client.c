@@ -24,10 +24,10 @@ int main(){
 				pthread_exit ((void*)EXIT_FAILURE);
 	}
 	
-	lock_data_read( co,0);
+	get_lock_read( co,0);
 	printf("\n>> [%d ]\n",*a);
 	sleep(5);
-	unlock_data_read( co,0);
+	release_lock_read( co,0);
 	printf("ALLO \n");
 	close(co);
 	return 1;

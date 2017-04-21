@@ -43,19 +43,19 @@ int main(){
 				tmp=0;
 				for(k=0;k<N;k++){
 					printf("%d %d %d\n",i,j,k);
-					lock_data_read( co,0);
+					get_lock_read( co,0);
 					tmp2=a->tab[i][k];
-					unlock_data_read( co,0);
+					release_lock_read( co,0);
 
-					lock_data_read( co,1);
+					get_lock_read( co,1);
 					tmp3=b->tab[k][j];					
-					unlock_data_read( co,1);
+					release_lock_read( co,1);
 
 					tmp+=tmp2*tmp3;
 				}
-				lock_data_write( co,2);
+				get_lock_write( co,2);
 				c->tab[i][j]=tmp;
-				unlock_data_write( co,2);
+				release_lock_write( co,2);
 
 			}
 			
@@ -63,7 +63,7 @@ int main(){
 		
 		
 		
-		lock_data_read( co,2);
+		get_lock_read( co,2);
 		for(i=N/2;i<N;i++){
 			for(j=N/2;j<N;j++){
 				printf("%d ",c->tab[i][j]);
@@ -72,7 +72,7 @@ int main(){
 		}
 		printf("\n ALLO %d",c->tab[N-1][1]);
 
-		unlock_data_read( co,2);	
+		release_lock_read( co,2);	
 	
 
 	close(co);

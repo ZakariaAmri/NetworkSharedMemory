@@ -46,7 +46,7 @@ void *slave_action(int * acc){
 	printf(" >>>  >>> Thread is running\n");
 	char *dec = "mllpzo";
 	int i=0;
-	while(recevoir_msg(*acc) != NULL)
+	while(rcv_msg(*acc) != NULL)
 	{
 		printf("***********/ REQUEST %d\n",i);
 		i++;

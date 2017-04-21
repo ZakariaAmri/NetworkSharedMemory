@@ -14,10 +14,10 @@ int main(){
 	add_data(&memory ,a, sizeof(int),0);
 	add_data(&memory ,b,1025*(sizeof(int)),1);
 	printf(">> JE DORS\n");
-	lock_data_read( co,0);
+	get_lock_read( co,0);
 	//printf("\n>> [%d]\n",(int)memory.adr_begin);
 	sleep(5);
-	unlock_data_read( co,0);
+	release_lock_read( co,0);
 	printf("ALLO \n");
 	close(co);
 	return 1;

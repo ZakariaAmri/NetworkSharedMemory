@@ -3,12 +3,12 @@
 #include "msg.h"
 
 
-int envoie_msg(SOCKET flux,int type,int id)
+int send_msg(SOCKET flux,int type,int id)
 {
 	char *tmp;
 	int val;
 	char msg[1023] = "";
-	construction_message(msg,type,id);
+	make_msg(msg,type,id);
 	//printf(">> Envoie du message :: ");
 	val = write(flux, msg, 1023);
 	if(val < 0)
@@ -55,7 +55,7 @@ int envoie_page(SOCKET flux,int type,char *msg)
 }
 
 
-int traitement(SOCKET flux,char *buffer)
+int process(SOCKET flux,char *buffer)
 {
 	char *id;
 	int value = 0;
@@ -71,15 +71,15 @@ int traitement(SOCKET flux,char *buffer)
 	{
 		case INIT_MPR		:
 			value = memory.size;
-			envoie_msg(flux,SUCCES,value);
+			send_msg(flux,SUCCES,value);
 			break;
 
 		case DATA_LOCK_READ		:
 			tmp= get_id(id);
-			l_data_read(tmp);
+			lock_read(tmp);
 			d = search_data(tmp);
 			printf("NTM 1\n");
-			envoie_msg(flux,SUCCES,666);
+			send_msg(flux,SUCCES,666);
 			printf("NTM le retour\n");
 			break;
 
@@ -89,14 +89,14 @@ int traitement(SOCKET flux,char *buffer)
 			printf("NTP \n",tmp);
 			d = search_data(tmp);
 			printf("NTP %lx\n",d->adr_begin);
-			unl_data_read(tmp);
+			unlock_read(tmp);
 			break;
 
 		case DATA_LOCK_WRITE	:
 			tmp= get_id(id);
 			d = search_data(tmp);
-			l_data_write(tmp);
-			envoie_msg(flux,SUCCES,666);
+			lock_write(tmp);
+			send_msg(flux,SUCCES,666);
 			remove_RW_all(d->adr_begin,d->nb_page);
 			break;
 
@@ -104,7 +104,7 @@ int traitement(SOCKET flux,char *buffer)
 			tmp= get_id(id);
 			d = search_data(tmp);
 			get_RW_all(d->adr_begin,d->nb_page);
-			unl_data_write(tmp);
+			unlock_write(tmp);
 			break;
 
 
@@ -151,10 +151,10 @@ int traitement(SOCKET flux,char *buffer)
 			break;
 	}
 	return 1;
-	printf(">> >> Fin de traitement\n" );
+	printf(">> >> Fin de process\n" );
 }
 
-char *recevoir_msg(SOCKET flux)
+char *rcv_msg(SOCKET flux)
 {
 	char buffer[1024]="",tmp[1024]="";
 	//buffer = malloc(sizeof(int)*2+sizeof(char)*2);
@@ -172,7 +172,7 @@ char *recevoir_msg(SOCKET flux)
 		return NULL;
 	buffer[n] = '\0';
 	strcpy(tmp,buffer);
-	if(traitement(flux,tmp) ==-1){
+	if(process(flux,tmp) ==-1){
 		return "";
 	}
 	//free(tmp);

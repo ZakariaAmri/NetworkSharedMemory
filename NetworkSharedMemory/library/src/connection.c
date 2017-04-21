@@ -70,7 +70,7 @@ void *slave_action(int * acc){
 	int val;
 	*/
 	char dec[1024] = "mllpzo";
-	while(recevoir_msg(*acc) != NULL)
+	while(rcv_msg(*acc) != NULL)
 	{
 		/*
 		fgets(c,1024,fichier);
@@ -135,7 +135,7 @@ void valider_connexion(int port)
 		}
 		/*	On associe un thread a chaque client connecter	*/
 		if(nb_co>=MAX_SLAVE){
-			envoie_msg(*acc,FAIL_INIT,-1);
+			send_msg(*acc,FAIL_INIT,-1);
 			close(*acc);
 			free(acc);
 		}else{

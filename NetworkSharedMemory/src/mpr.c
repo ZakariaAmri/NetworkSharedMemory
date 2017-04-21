@@ -7,7 +7,7 @@ void init_mpr(int size)
 	int fd;
 	int flags = MAP_PRIVATE| MAP_FILE;
  	page_size = getpagesize();
-  	next_page = 12;
+  	page_shift = 12;
   	mpr m ;
   	/* Initialiser le segment a 0 */
   	if ((fd = open("/dev/zero", O_RDWR)) == -1) {
@@ -16,7 +16,7 @@ void init_mpr(int size)
   	}
     	/* Aligner la taille sur un multiple de pages */
 	if (size % page_size )
-		size = (((unsigned) size >> next_page) << next_page) + page_size;
+		size = (((unsigned) size >> page_shift) << page_shift) + page_size;
 	/*	sauvegarde la taille de la mpr et l'adresse du debut	*/
  	m.size = size;
   	m.adr_begin = (long)mmap(0, size, PROT_READ|PROT_WRITE, flags, fd, 0);  

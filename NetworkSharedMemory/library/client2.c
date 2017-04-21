@@ -27,12 +27,12 @@ int main(){
 
 	int i = 0;
 	while(i<=100){
-		lock_data_write( co,0);
+		get_lock_write( co,0);
 		a->tab[0][0] = (i++)%1024;
 		printf("apres %d\n",a->tab[0][0]);
 		//sleep(1);
 		printf("%d\n",i++);
-		unlock_data_write( co,0);	
+		release_lock_write( co,0);	
 	}
 	
 

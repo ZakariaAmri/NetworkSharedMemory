@@ -2,12 +2,12 @@
 #include "../include/verrou.h"
 
 
-int envoie_msg(SOCKET flux,int type,int id)
+int send_msg(SOCKET flux,int type,int id)
 {
 	char *tmp;
 	int val;
 	char msg[50] = "";
-	construction_message(msg,type,id);
+	make_msg(msg,type,id);
 	printf("---------------/ Envoie du message/---------------------------\n");
 	val = write(flux, msg, strlen(msg));
 	if(val < 0)
@@ -37,7 +37,7 @@ int envoie_data(SOCKET flux,int type,char *msg)
 }
 
 
-void traitement(SOCKET flux,char *buffer)
+void process(SOCKET flux,char *buffer)
 {
 	char *id,*data;
 	int value = 0;
@@ -54,30 +54,30 @@ void traitement(SOCKET flux,char *buffer)
 			printf(" initialiser la memoire partage :: %d\n", value);
 			//data = data_to_char();
 			//envoie_data(flux,SUCCES,data);
-			envoie_msg(flux,SUCCES,value);
+			send_msg(flux,SUCCES,value);
 			break;
 
 		case DATA_LOCK_READ		:
 			printf(" verrouiller la donnée en lecture\n");
-			l_data_read(get_id(id));
-			envoie_msg(flux,SUCCES,666);
+			lock_read(get_id(id));
+			send_msg(flux,SUCCES,666);
 			break;
 
 		case DATA_UNLOCK_READ	:
 			printf(" déverrouiller la donnée en lecture\n");
-			unl_data_read(get_id(id));
+			unlock_read(get_id(id));
 			break;
 
 		case DATA_LOCK_WRITE	:
 			printf(" verrouiller la donnée en écriture\n");
-			l_data_write(get_id(id));
-			envoie_msg(flux,SUCCES,666);
+			lock_write(get_id(id));
+			send_msg(flux,SUCCES,666);
 
 			break;
 
 		case DATA_UNLOCK_WRITE	:
 			printf(" déverrouiller la donnée en écriture\n");
-			unl_data_write(get_id(id));
+			unlock_write(get_id(id));
 
 			break;
 
@@ -98,10 +98,10 @@ void traitement(SOCKET flux,char *buffer)
 			printf("	Type de demande non traitée\n");
 			break;
 	}
-	printf(">> >> Fin de traitement\n" );
+	printf(">> >> Fin de process\n" );
 }
 
-char *recevoir_msg(SOCKET flux)
+char *rcv_msg(SOCKET flux)
 {
 	char buffer[1024]="",*tmp;
 	//buffer = malloc(sizeof(int)*2+sizeof(char)*2);
@@ -121,7 +121,7 @@ char *recevoir_msg(SOCKET flux)
 	buffer[n] = '\0';
 	tmp = malloc(sizeof(int)*2+sizeof(char)*2);
 	strcpy(tmp,buffer);
-	traitement(flux,tmp);
+	process(flux,tmp);
 	free(tmp);
 	printf("---------------/ Fin de la reception du message/--------------\n");
 	return &buffer;

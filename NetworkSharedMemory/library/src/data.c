@@ -10,7 +10,7 @@ struct test {
 int data_mpr(int taille_data,int mpr_size)
 {
 	if (taille_data % page_size )
-		taille_data = (((unsigned) taille_data >> next_page) << next_page) + page_size;
+		taille_data = (((unsigned) taille_data >> page_shift) << page_shift) + page_size;
 	return taille_data;
 }
 
@@ -61,7 +61,7 @@ void add_data(void **adr_data,int taille_data,int id)
 	printf("%lx\n",*adr_data );	
 	*adr_data = (void*)memory.adr_cur;
 	printf("%lx\n",*adr_data );
-	memory.adr_cur =  (long)(((long)*adr_data >> next_page)+nb_page) << next_page;
+	memory.adr_cur =  (long)(((long)*adr_data >> page_shift)+nb_page) << page_shift;
 	printf("---------------/Fin Ajout dans la MPR/------------------------\n");
 	print_data();
 }
@@ -97,7 +97,7 @@ void slave_add_data(void **adr_data,int taille_data,int id)
 	printf("%lx\n",*adr_data );	
 	*adr_data = (void*)memory.adr_cur;
 	printf("%lx\n",*adr_data );
-	memory.adr_cur =  (long)(((long)*adr_data >> next_page)+nb_page) << next_page;
+	memory.adr_cur =  (long)(((long)*adr_data >> page_shift)+nb_page) << page_shift;
 	printf("---------------/Fin Ajout dans la MPR/------------------------\n");
 	print_data();
 }

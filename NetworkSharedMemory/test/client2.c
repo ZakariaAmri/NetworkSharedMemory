@@ -20,10 +20,10 @@ int main(){
 		exit(1);
 	} 		 
 	printf(">> JE DORS %p\n",b);
-	lock_data_write( co,1);
+	get_lock_write( co,1);
 	b[0]=1;
 	sleep(5);
-	unlock_data_write( co,1);
+	release_lock_write( co,1);
 	printf("ALLO \n");
 	close(co);
 	return 1;

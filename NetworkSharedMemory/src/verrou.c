@@ -1,7 +1,7 @@
 #include "../include/verrou.h"
 
 
-void l_data_read(int id)
+void lock_read(int id)
 {
 	data *d = search_data(id);
 
@@ -15,7 +15,7 @@ void l_data_read(int id)
 	pthread_mutex_unlock(&(d->fifo));
 }
 
-void unl_data_read(int id)
+void unlock_read(int id)
 {
 	data *d = search_data(id);
 	pthread_mutex_lock(&(d->mutexlecture));
@@ -30,7 +30,7 @@ void unl_data_read(int id)
 }
 
 
-void l_data_write(int id)
+void lock_write(int id)
 {
 	data *d = search_data(id);
 	pthread_mutex_lock(&(d->fifo));
@@ -39,7 +39,7 @@ void l_data_write(int id)
 
 }
 
-void unl_data_write(int id)
+void unlock_write(int id)
 {
 	data *d = search_data(id);
 		

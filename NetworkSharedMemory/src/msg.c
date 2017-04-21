@@ -1,7 +1,7 @@
 #include "../include/msg.h"
 #include "../include/data.h"
 
-void construction_message(char msg[],int type,int id)
+void make_msg(char msg[],int type,int id)
 {	
 	char tmp[10];
 	sprintf(msg, "%d", type);

@@ -16,7 +16,7 @@
 #define VAR_H_
 /*		GESTIONNAIRE MEMOIRE PARTAGEE	*/
 #define MAX_SLAVE 10
-unsigned next_page; //pour decaler d'une page
+unsigned page_shift; //pour decaler d'une page
 int page_size; //nb octe d'une page
 
 typedef struct mpr mpr;
@@ -67,7 +67,7 @@ typedef int SOCKET_ACCEPT;
 typedef struct sockaddr_in SOCKADDR_IN;
 typedef struct sockaddr SOCKADDR;
 
-/*		Traitement defaut de page_size	*/
+/*		process defaut de page_size	*/
 struct sigaction sa;
 SOCKET sockac;
 

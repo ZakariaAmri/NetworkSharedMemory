@@ -1,7 +1,7 @@
 #include "verrou.h"
 
 
-void l_data_read(int id)
+void lock_read(int id)
 {
 	printf("LOCK EN READ de la donnée d'id %d [%d]\n",id,search_data(id));
 	data *d = search_data(id);
@@ -15,7 +15,7 @@ void l_data_read(int id)
 	pthread_mutex_unlock(&(d->fifo));
 }
 
-void unl_data_read(int id)
+void unlock_read(int id)
 {
 	printf("UNLOCK EN READ de la donnée d'id %d\n",id);
 	data *d = search_data(id);
@@ -31,7 +31,7 @@ void unl_data_read(int id)
 }
 
 
-void l_data_write(int id)
+void lock_write(int id)
 {
 	printf("LOCK EN WRITE de la donnée d'id %d\n",id);
 	data *d = search_data(id);
@@ -41,7 +41,7 @@ void l_data_write(int id)
 
 }
 
-void unl_data_write(int id)
+void unlock_write(int id)
 {
 	printf("UNLOCK EN WRITE de la donnée d'id %d\n",id);
 	data *d = search_data(id);

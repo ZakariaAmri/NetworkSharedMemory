@@ -11,11 +11,11 @@ static void tsigsegv(int sig, siginfo_t *si, void *context)
 	if(sig == SIGSEGV){
 	
 		/* adresse de la page qui a fait le defaut alignée  */    
-		long addr = ((long) si->si_addr >> next_page) << next_page ; 
+		long addr = ((long) si->si_addr >> page_shift) << page_shift ; 
 		/* type de l'erreur */
 		int err = ((ucontext_t*)context)->uc_mcontext.gregs[REG_ERR];
 
-		printf("Faute de protection sur la page(%p) Ox%lx !\n", addr, addr >> next_page);
+		printf("Faute de protection sur la page(%p) Ox%lx !\n", addr, addr >> page_shift);
 		sleep(5);
 		
 		data* d = search_data_by_addr(addr);
@@ -23,9 +23,9 @@ static void tsigsegv(int sig, siginfo_t *si, void *context)
 		if (err & 0x2){
 			printf("ECRITURE\n");
 		
-			envoie_msg(sockac,WRITE,d->id);
+			send_msg(sockac,WRITE,d->id);
 
-			if(atoi(recevoir_msg(sockac))==SUCCES){
+			if(atoi(rcv_msg(sockac))==SUCCES){
 				if ( mprotect((char *)(caddr_t)d->adr_begin, (d->nb_page)*page_size, PROT_READ | PROT_WRITE) <0 ) {
 					perror("mprotect");
 					exit(1);
